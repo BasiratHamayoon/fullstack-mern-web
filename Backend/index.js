@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-// const errorHandler = require('./middlewares/errorHandler.js');
+const errorHandler = require('./middlewares/errorHandler.js');
 const connectDB = require('./config/db');
 
 //Routes
@@ -21,7 +21,7 @@ app.use(express.json());
 // app.use('/api/posts', postRoutes);  
 // app.use('/api/users', userRoutes);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`http://localhost:${port} is now running!`));
