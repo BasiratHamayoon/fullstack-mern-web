@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
         required: true, 
         unique: true
     },
-    passowrd: {
+    password: {
         type: String ,
         required: true,
     },
@@ -36,12 +36,12 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', async function (next) {
     if(!this.isModified('passowrd')) return next();
-    this.passowrd = await bcrypt.hash(this.passowrd, 10);
+    this.passowrd = await bcrypt.hash(this.password, 10);
     next();
 });
 
 userSchema.methods.comparePassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.passowrd);
+    return await bcrypt.compare(enteredPassword, this.password);
 };
 
 module.exports = mongoose.model('User', userSchema);
