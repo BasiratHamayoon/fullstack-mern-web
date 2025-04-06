@@ -12,6 +12,17 @@ const register = catchAsync(async (req, res, next) => {
     const user = await User.create({ name, email, password });
     const token = signToken(user._id);
     res.status(201).json({ token, user });
-})
+    console.log("Saved user password:", user.password);
+});
 
-module.exports = { register };
+const login = catchAsync (async (req, res, next) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user || !(await user.comparePassword(password))) {
+        return next(appError('Incorrect email or password!', 401));
+    }
+    const token = signToken (user._id);
+    res.status(200).json({ token, user });
+});
+
+module.exports = { register, login };

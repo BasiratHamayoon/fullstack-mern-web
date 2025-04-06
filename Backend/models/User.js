@@ -12,34 +12,36 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     password: {
-        type: String ,
+        type: String,
         required: true,
     },
-    bio : {
-        type : String
+    bio: {
+        type: String
     },
-    role : {
-        type : String, 
-        enum : [ 'user', 'admin' ],
-        default : 'user'
+    role: {
+        type: String, 
+        enum: ['user', 'admin'],
+        default: 'user'
     },
-    savedPosts : [
+    savedPosts: [
         {
-            type : mongoose.Schema.Types.ObjectId, ref: 'Post'
+            type: mongoose.Schema.Types.ObjectId, ref: 'Post'
         }
     ],
-    createdAt : {
-        type : Date,
-        default : Date.now
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 
+// ✅ FIXED: Pre-save hook with correct spelling
 userSchema.pre('save', async function (next) {
-    if(!this.isModified('passowrd')) return next();
-    this.passowrd = await bcrypt.hash(this.password, 10);
+    if (!this.isModified('password')) return next();
+    this.password = await bcrypt.hash(this.password, 10);
     next();
 });
 
+// ✅ Password comparison method
 userSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
