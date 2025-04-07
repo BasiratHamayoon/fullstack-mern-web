@@ -14,7 +14,10 @@ const updateProfile = catchAsync(async (req, res, next) => {
 
 const deleteAccount = catchAsync(async (req, res, next ) => {
     await  User.findByIdAndDelete(req.user._id);
-    res.status(204).send();
+    res.status(200).json({
+        status: 'success',
+        message: 'Your account has been deleted successfully.'
+    });
 });
 
 module.exports = { getProfile, updateProfile, deleteAccount };

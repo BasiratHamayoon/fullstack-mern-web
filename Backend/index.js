@@ -8,7 +8,7 @@ const connectDB = require('./config/db');
 //Routes
 const authRoutes = require('./routes/auth.js');
 // const postRoutes = require('./routes/post.js');
-// const userRoutes = require('./routes/user.js');
+const userRoutes = require('./routes/user.js');
 
 dotenv.config();
 connectDB();
@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 // app.use('/api/posts', postRoutes);  
-// app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(errorHandler);
 
