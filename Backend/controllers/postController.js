@@ -7,4 +7,9 @@ const createPost = catchAsync(async (req, res, next) => {
     res.status(201).json(post);
 });
 
-module.exports = { createPost };
+const getAllPosts = catchAsync(async (req, res, next) => {
+    const posts = await Post.find().populate('author', 'name');
+    res.json(posts);
+})
+
+module.exports = { createPost, getAllPosts };
