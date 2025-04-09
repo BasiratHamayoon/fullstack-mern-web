@@ -16,6 +16,12 @@ const getPostByID = catchAsync(async (req, res, next) => {
     const post = await Post.findById(req.params.id).populate('author', 'name');
     if (!post) return next(appError('Post not Found!', 404));
     res.json(post);
+});
+
+const getPostByAuthor = catchAsync(async (req, res, next) => {
+    const posts = await Post.find({author: req.params.userId });
+    res.json(posts);
 })
 
-module.exports = { createPost, getAllPosts, getPostByID };
+
+module.exports = { createPost, getAllPosts, getPostByID, getPostByAuthor };
