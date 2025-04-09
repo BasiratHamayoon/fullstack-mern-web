@@ -31,7 +31,17 @@ const updatePost = catchAsync(async (req, res, next) => {
     }
     const update = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(update);
-})
+});
+
+const deletePost = catchAsync(async (req, res, next) => {
+    const post = await Post.findById(req.params.id);
+    if (!post) return next(appError('Post Not Found!', 404));
+    if (post.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+        return next(appError('Unauthorized', 403));
+    }
+    await Post.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Post Deleted!" });
+});
 
 
-module.exports = { createPost, getAllPosts, getPostByID, getPostByAuthor, updatePost };
+module.exports = { createPost, getAllPosts, getPostByID, getPostByAuthor, updatePost, deletePost };
