@@ -20,5 +20,23 @@ const addComment = catchAsync(async (req, res, next) => {
     res.status(201).json(comment);
 });
 
+const editComment = catchAsync(async (req, res, next) => {
+    const { content } = req.body;
+    const comment = await Comment.findById(req.params.commentId);
 
-module.exports = { addComment };
+    if(!comment) {
+        return next(appError('Comment Not Found!', 404));
+    }
+
+    if(comment.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+        return next(appError('You are not authorized to edit this comment!', 403));
+    }
+    comment.content = content;
+    await comment.save();
+
+    res.json(comment);
+});
+
+
+module.exports = { addComment, editComment };
+
