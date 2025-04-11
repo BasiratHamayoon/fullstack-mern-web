@@ -37,6 +37,25 @@ const editComment = catchAsync(async (req, res, next) => {
     res.json(comment);
 });
 
+const deleteComment = catchAsync(async (req, res, next) => {
+    const comment = await Comment.findById(req.params.commentId);
+
+    if(!comment) {
+        return next(appError('Comment not Found!', 404));
+    }
+
+    if(comment.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+        return next(appError('You are not Authorized to delete this comment!', 403));
+    }
+    await comment.remove();
+
+    // This can Remove comment refrence from the post
+    const post = await Post.findById(comment.post);;
+    post.comments.pull(comment._id);
+    await post.save();
+    res.status(204).send('Comment Deleted');    
+});
+
 const getComments = catchAsync(async (req, res, next) => {
     const post = await Post.findById(req.params.postId).populate('comments');
 
@@ -44,7 +63,7 @@ const getComments = catchAsync(async (req, res, next) => {
         return next(appError('Post Not Found!', 404));
     }
     res.json(post.comments);
-})
+});
 
 
 module.exports = { addComment, editComment, getComments };
