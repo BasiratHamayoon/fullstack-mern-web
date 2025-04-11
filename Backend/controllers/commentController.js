@@ -37,6 +37,15 @@ const editComment = catchAsync(async (req, res, next) => {
     res.json(comment);
 });
 
+const getComments = catchAsync(async (req, res, next) => {
+    const post = await Post.findById(req.params.postId).populate('comments');
 
-module.exports = { addComment, editComment };
+    if(!post) {
+        return next(appError('Post Not Found!', 404));
+    }
+    res.json(post.comments);
+})
+
+
+module.exports = { addComment, editComment, getComments };
 
