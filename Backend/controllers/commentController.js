@@ -47,13 +47,13 @@ const deleteComment = catchAsync(async (req, res, next) => {
     if(comment.user.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
         return next(appError('You are not Authorized to delete this comment!', 403));
     }
-    await comment.remove();
+    await Comment.findByIdAndDelete(req.params.commentId);
 
     // This can Remove comment refrence from the post
     const post = await Post.findById(comment.post);;
     post.comments.pull(comment._id);
     await post.save();
-    res.status(204).send('Comment Deleted');    
+    res.status(200).json({ message: 'Comment Deleted!' });    
 });
 
 const getComments = catchAsync(async (req, res, next) => {
@@ -66,5 +66,5 @@ const getComments = catchAsync(async (req, res, next) => {
 });
 
 
-module.exports = { addComment, editComment, getComments };
+module.exports = { addComment, editComment, getComments, deleteComment };
 
