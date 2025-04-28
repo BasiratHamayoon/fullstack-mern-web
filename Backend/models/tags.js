@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
 
-const tagSchema = new mongoose.Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true,
-        },
-        description: {
-            type: String,
-            trim: true
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now
-        },
+const tagSchema = new mongoose.Schema({
+    name: {
+        type: String
     },
-    { timestamps: true }
-);
+    slug: {
+        type: String,
+        unique: true,
+        lowercase: true
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users"
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    }
+});
 
-const tag = mongoose.model('Tag', tagSchema)
+const Tag = mongoose.model("Tag", tagSchema);
+module.exports = Tag;

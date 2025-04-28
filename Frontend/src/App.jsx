@@ -2,10 +2,12 @@ import { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home';
-import AllPosts from './Pages/AllPosts';
-import AboutUs from './Pages/AboutUs';
-import ContactUs from './Pages/ContactUs';
 import Navbar from './Componenets/Navbar';
+import Blogs from './Pages/Blogs';
+import Favorite from './Pages/Favorite';
+import Bookmark from './Pages/Bookmark';
+import CreatePost from './Pages/CreatePost';
+import Login from './Pages/Login';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,10 +16,12 @@ function App() {
     <>
     <Navbar />  
     <Routes>
-      <Route path='/' element={ <Home />} />
-      <Route path='/AllPosts' element= { <AllPosts /> } />
-      <Route path='/AboutUs' element= { <AboutUs /> } />
-      <Route path='/ContactUs' element = { <ContactUs /> } />
+      <Route path='/' element={ <Home />}/>
+      <Route path='/blogs' element= { <Blogs /> } />
+      <Route path='/favorite' element= { <Favorite /> } />
+      <Route path='/bookmark' element = { <Bookmark /> } />
+      <Route path='//create-post' element = { <CreatePost /> } />
+      <Route path='/login' element = { <Login /> } />
     </Routes>
       
     </>

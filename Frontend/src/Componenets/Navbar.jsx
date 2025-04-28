@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { LuUserCog } from "react-icons/lu";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaBookmark, FaPlus, FaSignInAlt } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
@@ -9,79 +9,125 @@ import { motion } from 'framer-motion';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
 
     const navLinks = [
-        { id: 1, title: 'Home', url: "/" },
-        { id: 2, title: "All Posts", url: '/AllPosts' },
-        { id: 3, title: "About Us", url: '/AboutUs' },
-        { id: 4, title: "Contact US", url: '/ContactUs' }
+        { id: 1, title: 'Blogs', url: '/Blogs', icon: <LuUserCog /> },
+        { id: 2, title: 'Favorite', url: '/favorites', icon: <FaRegHeart /> },
+        { id: 3, title: 'Bookmark', url: '/bookmarks', icon: <FaBookmark /> },
+        { id: 4, title: 'Create', url: '/create-post', icon: <FaPlus /> },
+        { id: 5, title: 'Login', url: '/login', icon: <FaSignInAlt /> },
     ];
 
     return (
-        <div className='flex flex-col w-[100%] justify-between'>
-            <div className='flex justify-between lg:gap-10 gap-2 items-center lg:px-[100px]'>
-                <div className=''>
-                    <h1 className='lg:text-4xl text-[28px] font-bold bg-gradient-to-r from-pink-400 to-blue-700 bg-clip-text text-transparent'>VoxHive</h1>
-                </div>
+        <div className='w-full flex flex-col bg-gradient-to-r from-pink-50 to-blue-50 shadow-md'>
+            {/* Top Navbar */}
+            <div className='flex justify-between items-center gap-4 w-full py-2 px-4 lg:px-16'>
                 
-                {/* Search Input - Visible on Large Screens, Moves to Burger Menu on Medium and Small Screens */}
-                <div className='hidden md:flex gap-2 justify-between items-center bg-gradient-to-r from-pink-100 to-blue-50 px-2 rounded-md w-[60%] '>
-                    <input type='Search' placeholder='Search' className='focus:outline-none w-full px-2 py-1' />
-                    <CiSearch className='text-purple-600' />    
+                {/* Logo */}
+                <div 
+                    className='cursor-pointer' 
+                    onClick={() => navigate("/")}
+                >
+                    <h1 className='text-[24px] font-bold bg-gradient-to-r from-pink-400 to-blue-700 bg-clip-text text-transparent'>
+                        VoxHive
+                    </h1>
                 </div>
-                
-                {/* Icons and Burger Menu Button */}
-                <div className='flex justify-end items-center gap-2 text-purple-600'>
-                    <LuUserCog size={25}/>
-                    <FaRegHeart size={25}/>
-                    <button className='md:hidden' onClick={() => setIsOpen(!isOpen)}>
-                        {isOpen ? <IoClose size={30} /> : <GiHamburgerMenu size={30} />}
-                    </button>
+
+                {/* Search Input */}
+                <div className='hidden md:flex items-center bg-white shadow-md px-3 rounded-full w-1/3'>
+                    <input 
+                        type='search' 
+                        placeholder='Search posts...' 
+                        className='w-full px-3 py-2 focus:outline-none rounded-full bg-transparent'
+                    />
+                    <CiSearch className='text-purple-600' size={24} />
                 </div>
-            </div>
-            
-            {/* Desktop View - Hidden in Medium and Small Screens */}
-            <div className='hidden md:flex justify-center items-center gap-6 py-4'>
-                {navLinks.map((link) => (
-                    <NavLink
-                        key={link.id}
-                        to={link.url}
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'bg-gradient-to-r from-pink-500 to-blue-500 text-white py-1 px-4 rounded-full transition-all duration-300 transform hover:scale-105'
-                                : 'px-4 py-1 rounded-full border-2 text-purple-600 border-purple-600 transition-all duration-300 transform hover:scale-105'
-                        }
-                    >
-                        {link.title}
-                    </NavLink>
-                ))}
-            </div>
-            
-            {/* Mobile Menu */}
-            {isOpen && (
-                <motion.div 
-                    initial={{ opacity: 0, y: -10 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    exit={{ opacity: 0, y: -10 }} 
-                    className='md:hidden flex flex-col items-center gap-4 py-5 bg-white shadow-lg rounded-md'>
-                    <div className='flex gap-2 justify-between items-center bg-gradient-to-r from-pink-100 to-blue-50 px-2 rounded-md w-[90%]'>
-                        <input type='Search' placeholder='Search' className='focus:outline-none w-full px-2 py-1' />
-                        <CiSearch className='text-purple-600' />    
-                    </div>
+
+                {/* Menu Links - Desktop */}
+                <div className='hidden md:flex items-center gap-5 text-purple-700 font-medium'>
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.id}
                             to={link.url}
                             className={({ isActive }) =>
-                                isActive
-                                    ? 'bg-gradient-to-r from-pink-500 to-blue-500 text-white py-1 px-4 rounded-full transition-all duration-300 transform hover:scale-105'
-                                    : 'px-4 py-1 rounded-full border-2 text-purple-600 border-purple-600 transition-all duration-300 transform hover:scale-105'
+                                isActive 
+                                ? 'flex items-center gap-2 text-pink-400 transition duration-300'
+                                : 'flex items-center gap-2 hover:text-blue-600 transition duration-300'
                             }
-                            onClick={() => setIsOpen(false)}
                         >
-                            {link.title}
+                            {link.icon} {link.title}
                         </NavLink>
                     ))}
+                </div>
+
+                {/* Hamburger Icon for Mobile */}
+                <div className='md:hidden flex items-center text-purple-800'>
+                    <button onClick={() => setIsOpen(true)}>
+                        <GiHamburgerMenu size={30} />
+                    </button>
+                </div>
+            </div>
+
+            {/* Mobile Menu */}
+            {isOpen && (
+                <motion.div 
+                    initial={{ x: "100%" }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "100%" }}
+                    transition={{ type: "tween", duration: 0.5 }}
+                    className='fixed top-0 right-0 w-full h-screen bg-gradient-to-r from-pink-50 to-blue-50 flex flex-col justify-between z-50 text-purple-700 font-medium p-6'
+                >
+                    {/* Top Logo and Close Button */}
+                    <div className="flex justify-between items-center">
+                        {/* Logo inside mobile menu */}
+                        <div 
+                            className='cursor-pointer' 
+                            onClick={() => {
+                                navigate("/");
+                                setIsOpen(false);
+                            }}
+                        >
+                            <h1 className='text-[24px] font-bold bg-gradient-to-r from-pink-400 to-blue-700 bg-clip-text text-transparent'>
+                                VoxHive
+                            </h1>
+                        </div>
+
+                        {/* Close Button */}
+                        <button onClick={() => setIsOpen(false)} className="text-purple-800">
+                            <IoClose size={36} />
+                        </button>
+                    </div>
+
+                    {/* Nav Links */}
+                    <div className='flex flex-col items-start gap-6 mt-10'>
+                        {navLinks.map((link) => (
+                            <NavLink
+                                key={link.id}
+                                to={link.url}
+                                onClick={() => setIsOpen(false)}
+                                className={({ isActive }) =>
+                                    isActive 
+                                    ? 'flex items-center gap-2 text-pink-400 text-xl transition duration-300'
+                                    : 'flex items-center gap-2 hover:text-blue-600 text-xl transition duration-300'
+                                }
+                            >
+                                {link.icon} {link.title}
+                            </NavLink>
+                        ))}
+                    </div>
+
+                    {/* Search at bottom */}
+                    <div className='w-full'>
+                        <div className='flex items-center bg-white shadow-md px-3 rounded-full w-full'>
+                            <input 
+                                type='search' 
+                                placeholder='Search posts...' 
+                                className='w-full px-3 py-2 focus:outline-none rounded-full bg-transparent'
+                            />
+                            <CiSearch className='text-purple-600' size={24} />
+                        </div>
+                    </div>
                 </motion.div>
             )}
         </div>

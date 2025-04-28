@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User.js');
-const appError = require('../utils/AppError.js');
+const User = require('../models/user.js');
+const appError = require('../utils/appError.js');
 
-const protect = async (req, res, next) => {
+const verify = async (req, res, next) => {
     let token;
 
     if(req.headers.authorization?.startsWith('Bearer')) {
@@ -31,4 +31,4 @@ const ristrictTo = (...roles) => {
     };
 };
 
-module.exports = { protect, ristrictTo };
+module.exports = { verify, ristrictTo };

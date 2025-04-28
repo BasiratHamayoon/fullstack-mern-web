@@ -1,9 +1,9 @@
 const express = require('express');
-const { createTag, allTags } = require('../controllers/tag.js');
+const { toggleBookMark } = require('../controllers/bookmark.js');
 const { verify } = require('../middlewares/authMiddleware.js');
+
 const router = express.Router();
 
-router.post('/create', verify, createTag);
-router.get('/all-tags', allTags)
+router.post("/toggle-bookMark/:postId", verify, toggleBookMark);
 
 module.exports = router;

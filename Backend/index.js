@@ -1,31 +1,35 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const cors = require('cors');
-const errorHandler = require('./middlewares/errorHandler.js');
-const connectDB = require('./config/db');
+const connectDB = require('./config/db.js');
+const multer = require('multer');
+const path = require('path')
+const dotenv = require('dotenv');
+dotenv.config();
 
 //Routes
-const authRoutes = require('./routes/auth.js');
+const userRoute = require('./routes/user.js');
 const postRoutes = require('./routes/post.js');
-const userRoutes = require('./routes/user.js');
+const tagRoute = require('./routes/tag.js');
+const bookMarkRoutes = require('./routes/bookmark.js');
+const LikeRoutes = require('./routes/like.js');
 const commentRoutes = require('./routes/comment.js');
-const savedPostRoutes = require('./routes/savedPosts.js');
 
-dotenv.config();
+
 connectDB();
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/posts', postRoutes);  
-app.use('/api/users', userRoutes);
-app.use('/api', commentRoutes);
-app.use('/api/saved-posts', savedPostRoutes);
+app.use('/api/user', userRoute);
+app.use('/api/posts', postRoutes);
+app.use('/api/tags', tagRoute);
+app.use('/api/bookMark', bookMarkRoutes);
+app.use('/api/likes', LikeRoutes);
+app.use('/api/comment', commentRoutes);
 
-app.use(errorHandler);
+
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`http://localhost:${port} is now running!`));
